@@ -908,6 +908,15 @@ assign(Builder.prototype, {
     return this;
   },
 
+  // Insert on conflict do nothing/update
+  onConflict(columns, updates) {
+    this._single.onConflict = {
+      columns,
+      updates,
+    };
+    return this;
+  },
+
   // Delete
   // ------
 
