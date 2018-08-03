@@ -114,6 +114,40 @@ assign(Builder.prototype, {
     return this;
   },
 
+  // With Recursive
+  // ------
+
+  withRecursive(alias, statement, recursive) {
+    if (typeof alias !== 'string') {
+      throw new Error('withRecursive() first argument must be a string');
+    }
+    if (
+      (typeof statement === 'function' ||
+        statement instanceof Builder ||
+        statement instanceof Raw) &&
+      (typeof recursive === 'function' ||
+        recursive instanceof Builder ||
+        recursive instanceof Raw)
+    ) {
+      return this.withRecursiveWrapped(alias, statement, recursive);
+    }
+    throw new Error(
+      'withRecursive() second and third argument must be a function / QueryBuilder or a raw'
+    );
+  },
+
+  // Helper for compiling any advanced `with recursive` queries.
+  withRecursiveWrapped(alias, query, recursive) {
+    this._statements.push({
+      grouping: 'with',
+      type: 'withRecursiveWrapped',
+      alias: alias,
+      value: query,
+      recursive: recursive,
+    });
+    return this;
+  },
+
   // Select
   // ------
 

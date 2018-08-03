@@ -694,6 +694,23 @@ assign(QueryCompiler.prototype, {
     );
   },
 
+  withRecursiveWrapped(statement) {
+    const val = this.formatter.rawOrFn(statement.value);
+    const recursive = this.formatter.rawOrFn(statement.recursive);
+    return (
+      (val &&
+        recursive &&
+        'recursive ' +
+          this.formatter.columnize(statement.alias) +
+          ' as (' +
+          val +
+          ' union all ' +
+          recursive +
+          ')') ||
+      ''
+    );
+  },
+
   // Determines whether to add a "not" prefix to the where clause.
   _not(statement, str) {
     if (statement.not) return `not ${str}`;
