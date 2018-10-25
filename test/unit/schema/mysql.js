@@ -2,24 +2,24 @@
 
 'use strict';
 
-var sinon = require('sinon');
-var MySQL_Client = require('../../../lib/dialects/mysql');
-var MySQL2_Client = require('../../../lib/dialects/mysql2');
+const sinon = require('sinon');
+const MySQL_Client = require('../../../lib/dialects/mysql');
+const MySQL2_Client = require('../../../lib/dialects/mysql2');
 
 module.exports = function(dialect) {
   describe(dialect + ' SchemaBuilder', function() {
-    var client;
+    let client;
     switch (dialect) {
       case 'mysql':
-        client = new MySQL_Client();
+        client = new MySQL_Client({ client: 'mysql' });
         break;
       case 'mysql2':
-        client = new MySQL2_Client();
+        client = new MySQL2_Client({ client: 'mysql2' });
         break;
     }
 
-    var tableSql;
-    var equal = require('assert').equal;
+    let tableSql;
+    const equal = require('assert').equal;
 
     it('basic create table with column collate', function() {
       tableSql = client
